@@ -28,7 +28,6 @@ import org.junit.Test;
 
 public class MutualDateTypesConverterFacadeTest {
 
-	private static final MutualDateTypesConverterFacade dateConverterFacade = MutualDateTypesConverterFacade.getInstance();
 	private static final Set<Class<?>> dateTypes = new LinkedHashSet<>(15);
 	private static final Map<String, String> mapDateStr = new LinkedHashMap<>();
 
@@ -174,13 +173,13 @@ public class MutualDateTypesConverterFacadeTest {
 				if (Instant.class == dateType) {
 					int debugLine = 0;
 				}
- 				Object converted = dateConverterFacade.convert(dateStr, dateType);
+ 				Object converted = MutualDateTypesConverterFacade.convert(dateStr, dateType);
  				System.out.println("\t" + "from String to " + dateType.getName() + " = " + converted);
 				for (Class<?> dateTypeTo : dateTypes) {
 					if (Instant.class == dateTypeTo) {
 						int debugLine = 0;
 					}
-					Object convertedTo = dateConverterFacade.convert(converted, dateTypeTo);
+					Object convertedTo = MutualDateTypesConverterFacade.convert(converted, dateTypeTo);
 	 				System.out.println("\t" + "from " + dateType.getName() + " to " + dateTypeTo.getName() 
 	 						+ ". converted-value = " + convertedTo);
 				}
