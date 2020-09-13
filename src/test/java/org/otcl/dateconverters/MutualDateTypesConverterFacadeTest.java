@@ -167,12 +167,13 @@ public class MutualDateTypesConverterFacadeTest {
  	@Test
 	public void test() {
 		for (Entry<String, String> entry : mapDateStr.entrySet()) {
-			String dateStr = entry.getValue();
-			if (dateStr.equals("dateStr3_1")) {
+			String key = entry.getKey();
+			if (key.equals("dateStr3_1")) {
 				int debugLine = 0;
 			}
+			String dateStr = entry.getValue();
 			for (Class<?> dateType : dateTypes) {
-				System.out.println(entry.getKey() + " : " + dateStr);
+				System.out.println(key + " : " + dateStr);
 				if (Instant.class == dateType) {
 					int debugLine = 0;
 				}
