@@ -4,7 +4,7 @@
 * @version 1.0
 * @since   2020-09-10 
 */
-package org.otcl.dateconverters;
+package org.otclfoundation.dateconverters;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -22,13 +22,13 @@ import java.util.Set;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.otcl.dateconverters.exception.DateConverterException;
+import org.otclfoundation.dateconverters.exception.DateConverterException;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class MutualDateTypesConverterFacade.
+ * The Class DateConverterFacade.
  */
-public class MutualDateTypesConverterFacade {
+public class DateConverterFacade {
 
 	/** The Constant dateTypes. */
 	private static final Set<Class<?>> dateTypes = new HashSet<>(15);
@@ -56,17 +56,17 @@ public class MutualDateTypesConverterFacade {
 	/**
 	 * Instantiates a new mutual date types converter facade.
 	 */
-	private MutualDateTypesConverterFacade() { }
+	private DateConverterFacade() { }
 	
 	/** The Constant dateConverterFacade. */
-	private static final MutualDateTypesConverterFacade dateConverterFacade = new MutualDateTypesConverterFacade();
+	private static final DateConverterFacade dateConverterFacade = new DateConverterFacade();
 	
 	/**
-	 * Gets the single instance of MutualDateTypesConverterFacade.
+	 * Gets the single instance of DateConverterFacade.
 	 *
-	 * @return single instance of MutualDateTypesConverterFacade
+	 * @return single instance of DateConverterFacade
 	 */
-	public static MutualDateTypesConverterFacade getInstance() {
+	public static DateConverterFacade getInstance() {
 		// no need of string singleton.
 		return dateConverterFacade;
 	}

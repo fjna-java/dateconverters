@@ -4,7 +4,7 @@
 * @version 1.0
 * @since   2020-09-10 
 */
-package org.otcl.dateconverters;
+package org.otclfoundation.dateconverters;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -21,7 +21,7 @@ import java.util.TimeZone;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.otcl.dateconverters.exception.DateConverterException;
+import org.otclfoundation.dateconverters.exception.DateConverterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,105 +29,104 @@ import com.github.sisyphsu.dateparser.DateParserUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ToOffsetDateTime.
+ * The Class ToLocalDateTime.
  */
-class ToOffsetDateTime extends AbstractDateConversions {
+class ToLocalDateTime extends AbstractDateConversions {
 
 	/** The Constant LOGGER. */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ToOffsetDateTime.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToLocalDateTime.class);
 
 	/**
-	 * To offset date time.
+	 * To local date time.
 	 *
 	 * @param <F> the generic type
 	 * @param date the date
-	 * @return the offset date time
+	 * @return the local date time
 	 */
-	public static <F> OffsetDateTime toOffsetDateTime(F date) {
+	public static <F> LocalDateTime toLocalDateTime(F date) {
 		if (date == null) {
 			return null;
 		}
 		if (date instanceof String) {
 			Date utilDate = DateParserUtils.parseDate((String) date);
-			return utilDate.toInstant().atOffset(DEFAULT_ZONE_OFFSET);
-		}
+			return Instant.ofEpochMilli(utilDate.getTime()).atZone(DEFAULT_ZONE_ID).toLocalDateTime();
+		} 
 		if (date instanceof Date) {
-			return Instant.ofEpochMilli(((Date) date).getTime()).atZone(DEFAULT_ZONE_ID).toOffsetDateTime();
+			return Instant.ofEpochMilli(((Date) date).getTime()).atZone(DEFAULT_ZONE_ID).toLocalDateTime();
 		}
 		if (date instanceof Timestamp) {
-			Timestamp timestamp = (Timestamp) date;
-			return OffsetDateTime.ofInstant(timestamp.toInstant(), DEFAULT_ZONE_OFFSET);
+			return ((Timestamp) date).toLocalDateTime();
 		}
 		if (date instanceof Calendar) {
 			Calendar calendar = (Calendar) date;
 			TimeZone timeZone = calendar.getTimeZone();
 			ZoneId zoneId = timeZone == null ? DEFAULT_ZONE_ID : timeZone.toZoneId();
-			return OffsetDateTime.ofInstant(calendar.toInstant(), zoneId);
+			return LocalDateTime.ofInstant(calendar.toInstant(), zoneId);
 		}
 		if (date instanceof XMLGregorianCalendar) {
-			return OffsetDateTime.from(((XMLGregorianCalendar) date).toGregorianCalendar().toZonedDateTime());
+			return ((XMLGregorianCalendar) date).toGregorianCalendar().toZonedDateTime().toLocalDateTime();
 		}
 		if (date instanceof Instant) {
 			Instant instant = ((Instant) date);
-			return instant.atZone(DEFAULT_ZONE_ID).toOffsetDateTime();
+			return instant.atZone(DEFAULT_ZONE_ID).toLocalDateTime();
 		}
 		if (date instanceof LocalDate) {
-			return ((LocalDate) date).atStartOfDay().atOffset(DEFAULT_ZONE_OFFSET);
+			return ((LocalDate) date).atStartOfDay();
 		}
 		if (date instanceof LocalTime) {
-			LOGGER.warn("No date information available to convert to OffsetDateTime. Returning null.");
+			LOGGER.warn("No date information available to convert to LocalDateTime. Returning null.");
 			return null;
 		}
 		if (date instanceof LocalDateTime) {
-			return ((LocalDateTime) date).atOffset(DEFAULT_ZONE_OFFSET);
+			return (LocalDateTime) date;
 		}
 		if (date instanceof ZonedDateTime) {
-			return ((ZonedDateTime) date).toOffsetDateTime();
+			return ((ZonedDateTime) date).toLocalDateTime();
 		}
 		if (date instanceof OffsetDateTime) {
-			return (OffsetDateTime) date;
+			return ((OffsetDateTime) date).toZonedDateTime().toLocalDateTime();
 		}
 		if (date instanceof org.joda.time.Instant) {
-			return OffsetDateTime.ofInstant(Instant.ofEpochMilli(((org.joda.time.Instant) date).getMillis()),
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(((org.joda.time.Instant) date).getMillis()),
 					DEFAULT_ZONE_ID);
 		}
 		if (date instanceof org.joda.time.DateTime) {
-			return OffsetDateTime.ofInstant(Instant.ofEpochMilli(((org.joda.time.DateTime) date).getMillis()),
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(((org.joda.time.DateTime) date).getMillis()),
 					DEFAULT_ZONE_ID);
 		}
 		if (date instanceof org.joda.time.LocalDate) {
 			org.joda.time.DateTime dateTime = ((org.joda.time.LocalDate) date).toDateTimeAtStartOfDay();
-			return OffsetDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), DEFAULT_ZONE_ID);
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), DEFAULT_ZONE_ID);
 		}
 		if (date instanceof org.joda.time.LocalTime) {
-			LOGGER.warn("No date information available to convert to OffsetDateTime. Returning null.");
+			LOGGER.warn("No date information available to convert to Instant. Returning null.");
 			return null;
 		}
 		if (date instanceof org.joda.time.LocalDateTime) {
 			org.joda.time.LocalDateTime localDateTime = ((org.joda.time.LocalDateTime) date);
-			return OffsetDateTime.ofInstant(Instant.ofEpochMilli(localDateTime.toDateTime().getMillis()), DEFAULT_ZONE_ID);
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(localDateTime.toDateTime().getMillis()), DEFAULT_ZONE_ID);
 		}
 		throw new DateConverterException("",
-				"Date conversion error! Unable to convert " + date.getClass().getName() + " to OffsetDateTime");
+				"Date conversion error! Unable to convert " + date.getClass().getName() + " to LocalDateTime");
 	}
 
 	/**
-	 * To offset date time.
+	 * To local date time.
 	 *
 	 * @param dateString the date string
 	 * @param format the format
-	 * @return the offset date time
+	 * @return the local date time
 	 */
-	public static OffsetDateTime toOffsetDateTime(String dateString, String format) {
+	public static LocalDateTime toLocalDateTime(String dateString, String format) {
 		if (dateString == null) {
 			return null;
 		}
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-			return OffsetDateTime.parse(dateString, formatter);
+			return LocalDateTime.parse(dateString, formatter);
 		} catch (Exception e) {
 			throw new DateConverterException("",
-					"Date conversion error! Unable to convert " + dateString + " to OffsetDateTime", e);
+					"Date conversion error! Unable to convert " + dateString + " to LocalDateTime", e);
 		}
 	}
 

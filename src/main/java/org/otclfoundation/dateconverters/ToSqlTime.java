@@ -4,7 +4,7 @@
 * @version 1.0
 * @since   2020-09-10 
 */
-package org.otcl.dateconverters;
+package org.otclfoundation.dateconverters;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -21,7 +21,7 @@ import java.util.Date;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.otcl.dateconverters.exception.DateConverterException;
+import org.otclfoundation.dateconverters.exception.DateConverterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,87 +29,89 @@ import com.github.sisyphsu.dateparser.DateParserUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ToSqlTimestamp.
+ * The Class ToSqlTime.
  */
-class ToSqlTimestamp extends AbstractDateConversions {
+class ToSqlTime extends AbstractDateConversions {
 
 	/** The Constant LOGGER. */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ToSqlTimestamp.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToSqlTime.class);
 
 	/**
-	 * To sql timestamp.
+	 * To sql time.
 	 *
 	 * @param <F> the generic type
 	 * @param date the date
-	 * @return the timestamp
+	 * @return the time
 	 */
-	public static <F> Timestamp toSqlTimestamp(F date) {
+	public static <F> Time toSqlTime(F date) {
 		if (date == null) {
 			return null;
 		}
 		if (date instanceof String) {
 			Date utilDate = DateParserUtils.parseDate((String) date);
-			return new Timestamp(utilDate.getTime());
+			return new Time(utilDate.getTime());
 		} 
 		if (date instanceof Date) {
-			return new Timestamp(((java.util.Date) date).getTime());
+			return new Time(((java.util.Date) date).getTime());
 		}
 		if (date instanceof Timestamp) {
-			return (Timestamp) date;
+			return new Time(((Timestamp) date).getTime());
+		}
+		if (date instanceof Time) {
+			return (Time) date;
 		}
 		if (date instanceof Calendar) {
-			return new Timestamp(((Calendar) date).getTimeInMillis());
+			return new Time(((Calendar) date).getTimeInMillis());
 		}
 		if (date instanceof XMLGregorianCalendar) {
-			return new Timestamp(((XMLGregorianCalendar) date).toGregorianCalendar().getTimeInMillis());
+			return new Time(((XMLGregorianCalendar) date).toGregorianCalendar().getTimeInMillis());
 		}
 		if (date instanceof Instant) {
-			return new Timestamp(((Instant) date).toEpochMilli());
+			return new Time(((Instant) date).toEpochMilli());
 		}
 		if (date instanceof LocalDate) {
-			return new Timestamp(((LocalDate) date).atStartOfDay(DEFAULT_ZONE_ID).toInstant().toEpochMilli());
+			return new Time(((LocalDate) date).atStartOfDay(DEFAULT_ZONE_ID).toInstant().toEpochMilli());
 		}
 		if (date instanceof LocalTime) {
-			LOGGER.warn("No date information available to convert to Timestamp.");
-			return null;
+			return Time.valueOf((LocalTime) date);
 		}
 		if (date instanceof LocalDateTime) {
-			return new Timestamp(((LocalDateTime) date).atZone(DEFAULT_ZONE_ID).toInstant().toEpochMilli());
+			return new Time(((LocalDateTime) date).atZone(DEFAULT_ZONE_ID).toInstant().toEpochMilli());
 		}
 		if (date instanceof ZonedDateTime) {
-			return new Timestamp(((ZonedDateTime) date).toInstant().toEpochMilli());
+			return new Time(((ZonedDateTime) date).toInstant().toEpochMilli());
 		}
 		if (date instanceof OffsetDateTime) {
-			return new Timestamp(((OffsetDateTime) date).toInstant().toEpochMilli());
+			return new Time(((OffsetDateTime) date).toInstant().toEpochMilli());
 		}
 		if (date instanceof org.joda.time.Instant) {
-			return new Timestamp(((org.joda.time.Instant) date).getMillis());
+			return new Time(((org.joda.time.Instant) date).toDate().getTime());
 		}
 		if (date instanceof org.joda.time.DateTime) {
-			return new Timestamp(((org.joda.time.DateTime) date).getMillis());
+			return new Time(((org.joda.time.DateTime) date).toDate().getTime());
 		}
 		if (date instanceof org.joda.time.LocalDate) {
-			return new Timestamp(((org.joda.time.LocalDate) date).toDate().getTime());
+			return new Time(((org.joda.time.LocalDate) date).toDate().getTime()); 
 		}
 		if (date instanceof org.joda.time.LocalTime) {
-			LOGGER.warn("No date information available to convert to Timestamp.");
-			return null;
+			org.joda.time.LocalTime localTime = (org.joda.time.LocalTime) date;
+			return new Time(localTime.getHourOfDay(), localTime.getMinuteOfHour(), localTime.getSecondOfMinute());
 		}
 		if (date instanceof org.joda.time.LocalDateTime) {
-			return new Timestamp(((org.joda.time.LocalDateTime) date).toDate().getTime()); 
+			return new Time(((org.joda.time.LocalDateTime) date).toDate().getTime()); 
 		}
 		throw new DateConverterException("",
-				"Date conversion error! Unable to convert " + date.getClass().getName() + " to java.sql.Timestamp");
+				"Date conversion error! Unable to convert " + date.getClass().getName() + " to java.sql.Time");
 	}
 
 	/**
-	 * To sql timestamp.
+	 * To sql time.
 	 *
 	 * @param dateString the date string
 	 * @param format the format
 	 * @return the time
 	 */
-	public static Time toSqlTimestamp(String dateString, String format) {
+	public static Time toSqlTime(String dateString, String format) {
 		if (dateString == null) {
 			return null;
 		}
@@ -118,7 +120,7 @@ class ToSqlTimestamp extends AbstractDateConversions {
 			return new Time(date.getTime());
 		} catch (ParseException e) {
 			throw new DateConverterException("",
-					"Date conversion error! Unable to convert " + dateString + " to java.sql.Timestamp", e);
+					"Date conversion error! Unable to convert " + dateString + " to java.sql.Time", e);
 		}
 	}
 

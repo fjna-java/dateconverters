@@ -4,8 +4,11 @@
 * @version 1.0
 * @since   2020-09-10 
 */
-package org.otcl.dateconverters;
+package org.otclfoundation.dateconverters;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -25,8 +28,9 @@ import java.util.Set;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.junit.Test;
+import org.otclfoundation.dateconverters.DateConverterFacade;
 
-public class MutualDateTypesConverterFacadeTest {
+public class DateConverterFacadeTest {
 
 	private static final Set<Class<?>> dateTypes = new LinkedHashSet<>(15);
 	private static final Map<String, String> mapDateStr = new LinkedHashMap<>();
@@ -139,6 +143,7 @@ public class MutualDateTypesConverterFacadeTest {
 		mapDateStr.put("dateStr54","2013-11-12 00:32:47.111222333 +0000");
 		mapDateStr.put("dateStr54_1","1384216367111222333");
 
+//		---- fail scenarios
 //		mapDateStr.put("dateStr46_1","2014.03.30 13:00:00 +1300");
 //		mapDateStr.put("dateStr47","2014-03-30 00:00:00 -1400");
 //		mapDateStr.put("dateStr47_1","2014.03.30 00:00:00 -1400");
@@ -166,28 +171,60 @@ public class MutualDateTypesConverterFacadeTest {
 	
  	@Test
 	public void test() {
+ 		int i = 0;
 		for (Entry<String, String> entry : mapDateStr.entrySet()) {
+//			if (i < 66) {
+//				i++;
+//				continue;
+//			}
+			i++;
 			String key = entry.getKey();
 			if (key.equals("dateStr3_1")) {
 				int debugLine = 0;
 			}
 			String dateStr = entry.getValue();
-			for (Class<?> dateType : dateTypes) {
-				System.out.println(key + " : " + dateStr);
-				if (Instant.class == dateType) {
-					int debugLine = 0;
-				}
- 				Object converted = MutualDateTypesConverterFacade.convert(dateStr, dateType);
- 				System.out.println("\t" + "from String to " + dateType.getName() + " = " + converted);
-				for (Class<?> dateTypeTo : dateTypes) {
-					if (Instant.class == dateTypeTo) {
+	 		int j = 0;
+			FileWriter fileWriter = null;
+			try {
+				fileWriter = new FileWriter("D:\\elasticTree\\dateconverter-testing\\" + key + ".txt");
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+
+				for (Class<?> dateType : dateTypes) {
+//					if (j < 1) {
+//						j++;
+//						continue;
+//					}
+					j++;
+					String line = key + " : " + dateStr;
+					System.out.println(line);
+	 				writer.write(line + "\n");
+					if (Instant.class == dateType) {
 						int debugLine = 0;
 					}
-					Object convertedTo = MutualDateTypesConverterFacade.convert(converted, dateTypeTo);
-	 				System.out.println("\t" + "from " + dateType.getName() + " to " + dateTypeTo.getName() 
-	 						+ ". converted-value = " + convertedTo);
+	 				Object converted = DateConverterFacade.convert(dateStr, dateType);
+	 				line = "    from String to " + dateType.getName() + "     = " + converted;
+	 				System.out.println(line);
+	 				writer.write(line + "\n");
+	 				line = "    converting from " + dateType;
+					System.out.println(line);
+	 				writer.write(line + "\n");
+					for (Class<?> dateTypeTo : dateTypes) {
+						if (Instant.class == dateTypeTo) {
+							int debugLine = 0;
+						}
+						Object convertedTo = DateConverterFacade.convert(converted, dateTypeTo);
+						line = "        - to " + dateTypeTo.getName() + "     = " + convertedTo;
+		 				System.out.println(line);
+		 				writer.write(line + "\n");
+					}
+//					break;
 				}
- 			}
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			break;
  		}
 	}
 
