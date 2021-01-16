@@ -1,4 +1,4 @@
-# dateConverter library
+# dateConverters library
 
 
 This is a small date-converter library wherein it converts a date of any date-types mutually between various below date APIs without any need to write any date-conversion code to convert dates between these date API libraries. 
